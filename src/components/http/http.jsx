@@ -33,3 +33,13 @@ export async function listPaged(page, limit = 10) {
 
   return { total: Number(result.headers['X-Total-Count'.toLowerCase()]), data: persons };
 }
+
+export async function save(user) {
+  let result;
+  if (user.id !== undefined) {
+    result = await axios.put(`http://localhost:3000/users/${user.id}`, user);
+  } else {
+    result = await axios.post('http://localhost:3000/users', user);
+  }
+  return result.data;
+}

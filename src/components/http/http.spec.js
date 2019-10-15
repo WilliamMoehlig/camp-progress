@@ -1,5 +1,5 @@
 import nock from 'nock';
-import { getUserById, listPaged } from './http';
+import { getUserById, listPaged, save } from './http';
 
 describe('API tests for users', () => {
   describe('Get user by ID', () => {
@@ -76,6 +76,47 @@ describe('API tests for users', () => {
       expect(result2.data).toStrictEqual(resource);
       expect(result2.total).toBe(3);
       expect(result.total).toBe(3);
+    });
+  });
+
+  describe('Save user', () => {
+    test('it should post a new user', async () => {
+      // Arrange
+      const newUser = {
+        firstName: 'William',
+        lastName: 'Post',
+        birthDate: '1996-05-07',
+        gender: 'M',
+        isFamily: false,
+      };
+
+      nock('http://localhost:3000')
+        .post('/users')
+        .reply(200, { ...newUser, id: 9 });
+      // Act
+      const savedUser = await save(newUser);
+      // Assert
+      expect(savedUser).toStrictEqual({ ...newUser, id: 9 });
+    });
+
+    test('it should put to an existing user', async () => {
+      // Arrange
+      const newUser = {
+        id: 9,
+        firstName: 'William',
+        lastName: 'Post',
+        birthDate: '1996-05-07',
+        gender: 'M',
+        isFamily: false,
+      };
+
+      nock('http://localhost:3000')
+        .put(`/users/${newUser.id}`)
+        .reply(200, newUser);
+      // Act
+      const savedUser = await save(newUser);
+      // Assert
+      expect(savedUser).toStrictEqual(newUser);
     });
   });
 });
