@@ -14,12 +14,17 @@ import axios from 'axios';
 export async function GetUserById(id) {
   const uri = `http://localhost:3000/users/${id}`;
   const result = await axios.get(uri);
-  return {
+  const person = {
     id: result.data.id,
     firstName: result.data.firstName,
     lastName: result.data.lastName,
-    birthDate: new Date(result.data.birthDate),
     gender: result.data.gender,
     isFamily: result.data.isFamily,
   };
+
+  if (result.data.birthDate !== null && result.data.birthDate !== undefined) {
+    person.birthDate = new Date(result.data.birthDate);
+  }
+
+  return person;
 }
