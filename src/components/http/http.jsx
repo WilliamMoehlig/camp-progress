@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from './api';
 
 function mapPerson(resource) {
   const result = { ...resource };
@@ -16,7 +16,7 @@ function mapPerson(resource) {
  */
 // eslint-disable-next-line import/prefer-default-export
 export async function getUserById(id) {
-  const result = await axios.get(`http://localhost:3000/users/${id}`);
+  const result = await api.get(`/users/${id}`);
   return mapPerson(result.data);
 }
 
@@ -27,7 +27,7 @@ export async function listPaged(page, limit = 10) {
     _limit: limit,
   };
 
-  const result = await axios.get(`http://localhost:3000/users`, { params });
+  const result = await api.get(`/users`, { params });
 
   const persons = result.data.map(r => mapPerson(r));
 
@@ -37,9 +37,9 @@ export async function listPaged(page, limit = 10) {
 export async function save(user) {
   let result;
   if (user.id !== undefined) {
-    result = await axios.put(`http://localhost:3000/users/${user.id}`, user);
+    result = await api.put(`/users/${user.id}`, user);
   } else {
-    result = await axios.post('http://localhost:3000/users', user);
+    result = await api.post('/users', user);
   }
   return result.data;
 }

@@ -1,20 +1,42 @@
 import nock from 'nock';
 import { getUserById, listPaged, save } from './http';
 
+function BartSimpson() {
+  const bart = {
+    firstName: 'Bart',
+    gender: 'M',
+    id: 1,
+    isFamily: true,
+    lastName: 'Simpson',
+  };
+  return bart;
+}
+
+function LisaSimpson() {
+  const lisa = {
+    isFamily: true,
+    birthDate: new Date('2011-08-13T22:00:00.000Z'),
+    gender: 'F',
+    lastName: 'Simpson',
+    firstName: 'Lisa',
+    id: 2,
+  };
+  return lisa;
+}
+
+function WilliamMoehlig() {
+  const william = { firstName: 'William', lastName: 'Post', birthDate: '1996-05-07', gender: 'M', isFamily: false };
+  return william;
+}
+
+const noq = nock('http://localhost:3000');
+
 describe('API tests for users', () => {
   describe('Get user by ID', () => {
     test('it returns the res.data', async () => {
-      const resource = {
-        firstName: 'Bart',
-        gender: 'M',
-        id: 1,
-        isFamily: true,
-        lastName: 'Simpson',
-      };
+      const resource = BartSimpson();
 
-      nock('http://localhost:3000')
-        .get('/users/1')
-        .reply(200, resource);
+      noq.get('/users/1').reply(200, resource);
 
       const result = await getUserById(1);
 
@@ -22,18 +44,9 @@ describe('API tests for users', () => {
     });
 
     test('it maps birthdate as date', async () => {
-      const resource = {
-        isFamily: true,
-        birthDate: new Date('2011-08-13T22:00:00.000Z'),
-        gender: 'F',
-        lastName: 'Simpson',
-        firstName: 'Lisa',
-        id: 2,
-      };
+      const resource = LisaSimpson();
 
-      nock('http://localhost:3000')
-        .get('/users/2')
-        .reply(200, resource);
+      noq.get('/users/2').reply(200, resource);
 
       const result = await getUserById(2);
 
@@ -45,13 +58,7 @@ describe('API tests for users', () => {
     test('sort the data on lastName, firstName', async () => {
       // Arrange
       const resource = [
-        {
-          firstName: 'Bart',
-          gender: 'M',
-          id: 1,
-          isFamily: true,
-          lastName: 'Simpson',
-        },
+        BartSimpson(),
         {
           firstName: 'Edna',
           gender: 'F',
@@ -61,11 +68,21 @@ describe('API tests for users', () => {
         },
       ];
 
-      nock('http://localhost:3000')
-        .get('/users?_sort=lastName,firstName&_page=1&_limit=10')
+      noq
+        .get('/users')
+        .query({
+          _sort: 'lastName,firstName',
+          _page: 1,
+          _limit: 10,
+        })
         .reply(200, resource, { 'X-Total-Count': 3 });
-      nock('http://localhost:3000')
-        .get('/users?_sort=lastName,firstName&_page=2&_limit=5')
+      noq
+        .get('/users')
+        .query({
+          _sort: 'lastName,firstName',
+          _page: 2,
+          _limit: 5,
+        })
         .reply(200, resource, { 'X-Total-Count': 3 });
 
       // Act
@@ -82,17 +99,9 @@ describe('API tests for users', () => {
   describe('Save user', () => {
     test('it should post a new user', async () => {
       // Arrange
-      const newUser = {
-        firstName: 'William',
-        lastName: 'Post',
-        birthDate: '1996-05-07',
-        gender: 'M',
-        isFamily: false,
-      };
+      const newUser = WilliamMoehlig();
 
-      nock('http://localhost:3000')
-        .post('/users')
-        .reply(200, { ...newUser, id: 9 });
+      noq.post('/users').reply(200, { ...newUser, id: 9 });
       // Act
       const savedUser = await save(newUser);
       // Assert
@@ -102,17 +111,11 @@ describe('API tests for users', () => {
     test('it should put to an existing user', async () => {
       // Arrange
       const newUser = {
+        ...WilliamMoehlig(),
         id: 9,
-        firstName: 'William',
-        lastName: 'Post',
-        birthDate: '1996-05-07',
-        gender: 'M',
-        isFamily: false,
       };
 
-      nock('http://localhost:3000')
-        .put(`/users/${newUser.id}`)
-        .reply(200, newUser);
+      noq.put(`/users/${newUser.id}`).reply(200, newUser);
       // Act
       const savedUser = await save(newUser);
       // Assert
