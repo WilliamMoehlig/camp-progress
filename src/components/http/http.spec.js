@@ -1,49 +1,45 @@
 import nock from 'nock';
 import { GetUserById } from './http';
 
-describe('http nock', () => {
-  beforeEach(() => {
-    nock.cleanAll();
-  });
+describe('API tests for users', () => {
+  describe('Get user by ID', () => {
+    test('it returns the res.data', async () => {
+      const resource = {
+        // we will test the date later on because this is a special case
+        // birthDate: new Date('2009-01-19T23:00:00.000Z'),
+        firstName: 'Bart',
+        gender: 'M',
+        id: 1,
+        isFamily: true,
+        lastName: 'Simpson',
+      };
 
-  it('getById with date', async () => {
-    // Arrange
-    const id = 1;
-    const expectedResult = {
-      id,
-      firstName: 'Bart',
-      lastName: 'Simpson',
-      birthDate: '2009-01-19T23:00:00.000Z',
-      gender: 'M',
-      isFamily: true,
-    };
-    nock('http://localhost:3000')
-      .get(`/users/${id}`)
-      .reply(200, expectedResult);
+      nock('http://localhost:3000')
+        .get('/users/1')
+        .reply(200, resource);
 
-    // Act
-    const userResult = await GetUserById(id);
-    // Assert
-    expect(userResult).toStrictEqual({ expectedResult, birthDate: new Date(expectedResult.birthDate) });
-  });
+      const result = await GetUserById(1);
 
-  it('getById without date', async () => {
-    // Arrange
-    const id = 2;
-    const expectedResult = {
-      id,
-      firstName: 'Bart',
-      lastName: 'Simpson',
-      gender: 'M',
-      isFamily: true,
-    };
-    nock('http://localhost:3000')
-      .get(`/users/${id}`)
-      .reply(200, expectedResult);
+      expect(result).toEqual(resource);
+    });
 
-    // Act
-    const userResult = await GetUserById(id);
-    // Assert
-    expect(userResult).toStrictEqual(expectedResult);
+    test('it maps birthdate as date', async () => {
+      const resource = {
+        isFamily: true,
+        birthDate: new Date('2011-08-13T22:00:00.000Z'),
+        gender: 'F',
+        lastName: 'Simpson',
+        firstName: 'Lisa',
+        id: 2,
+      };
+
+      nock('http://localhost:3000')
+        .get('/users/2')
+        .reply(200, resource);
+
+      const result = await GetUserById(2);
+
+      expect(result).toEqual(resource);
+    });
   });
 });
