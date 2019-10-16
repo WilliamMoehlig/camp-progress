@@ -1,25 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { hot } from 'react-hot-loader/root';
-import { listPaged } from './components/http/http';
+
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './modules/home/home';
+import Login from './modules/login/login';
+import NotFound from './modules/pages/notFound';
+
+export function AppWithoutRouter() {
+  return (
+    <Switch>
+      <Route component={Login} path="/login" />
+      <Route component={Home} path="/" />
+      <Route component={NotFound} path="*" />
+    </Switch>
+  );
+}
 
 export function App() {
-  const [result, setResult] = useState([]);
-  useEffect(() => {
-    const runEffect = async () => {
-      const persons = await listPaged(1, 5);
-      setResult(persons.data);
-    };
-    runEffect();
-  }, []);
   return (
-    <>
-      <h1>Hello from ES2015+</h1>
-      <div className="main container-fluid">
-        {result.map(a => (
-          <p key={a.id}>{JSON.stringify(a)}</p>
-        ))}
-      </div>
-    </>
+    <Router>
+      <AppWithoutRouter />
+    </Router>
   );
 }
 
