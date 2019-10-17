@@ -1,13 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 
-function Login() {
+export function Login() {
   const nameRef = useRef();
   const passRef = useRef();
-  const [showLabel, setShowLabel] = useState();
-  useEffect(() => {
-    nameRef.current.focus();
-    setShowLabel(false);
-  }, []);
 
   function isValid() {
     const users = [{ user: 'admin', pass: 'secret' }, { user: 'user', pass: 'pass' }];
@@ -15,6 +10,12 @@ function Login() {
     const valid = users.find(u => u.user === formUser.user && u.pass === formUser.pass);
     return valid;
   }
+
+  const [showLabel, setShowLabel] = useState();
+  useEffect(() => {
+    nameRef.current.focus();
+    setShowLabel(false);
+  }, []);
 
   const submit = e => {
     e.preventDefault();
