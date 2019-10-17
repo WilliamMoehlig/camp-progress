@@ -6,7 +6,7 @@ import { AppWithoutRouter } from './app';
 jest.mock('./modules/home/home', () => () => {
   return <h1 data-testid="HomeMock">Mocked Home</h1>;
 });
-jest.mock('./modules/login/login', () => () => {
+jest.mock('./modules/login/Login', () => () => {
   return <h1 data-testid="LoginMock">Mocked Login</h1>;
 });
 jest.mock('./modules/pages/notFound', () => () => {
