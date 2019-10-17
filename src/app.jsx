@@ -1,9 +1,8 @@
 import React from 'react';
 import { hot } from 'react-hot-loader/root';
-
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './modules/home/home';
-import Login from './modules/login/login';
+import Login from './modules/login/Login';
 import NotFound from './modules/pages/notFound';
 
 export function AppWithoutRouter() {
