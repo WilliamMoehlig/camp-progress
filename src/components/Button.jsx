@@ -3,7 +3,10 @@ import { oneOf, bool, func, string, node } from 'prop-types';
 import classNames from 'classnames';
 
 function AlertButton({ children, event, type, size, disabled, className, variant }) {
-  const classSize = size !== 'none' && size === 'small' ? 'btn-sm' : 'btn-lg';
+  let classSize = '';
+  if (size !== 'none') {
+    classSize = size === 'small' ? 'btn-sm' : 'btn-lg';
+  }
   return (
     // eslint-disable-next-line react/button-has-type
     <button

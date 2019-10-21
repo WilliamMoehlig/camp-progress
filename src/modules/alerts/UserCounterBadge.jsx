@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AlertButton from './AlertButton';
+import AlertButton from '../../components/Button';
 import { listPaged } from '../http/http';
 
 function UserCounterBadge() {

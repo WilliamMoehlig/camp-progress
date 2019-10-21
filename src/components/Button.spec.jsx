@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
 import { render, fireEvent } from '@testing-library/react';
-import AlertButton from './AlertButton';
+import AlertButton from './Button';
 
 describe('component AlertButton', () => {
   test('it should execute the function passed', () => {
