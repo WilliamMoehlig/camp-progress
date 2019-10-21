@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
+import { func } from 'prop-types';
 
-function UserDetail() {
+function UserDetail({ onSubmit }) {
   const [user, setUser] = useState({ firstName: '', lastName: '', isFamily: false });
 
   const handleInput = e => {
@@ -10,6 +11,7 @@ function UserDetail() {
 
   const handleSubmit = e => {
     e.preventDefault();
+    onSubmit(user);
   };
 
   return (
@@ -71,5 +73,9 @@ function UserDetail() {
     </form>
   );
 }
+
+UserDetail.propTypes = {
+  onSubmit: func.isRequired,
+};
 
 export default UserDetail;

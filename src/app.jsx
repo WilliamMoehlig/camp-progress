@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Home from './modules/home/home';
 import Login from './modules/login/Login';
 import NotFound from './modules/pages/notFound';
-import UserDetail from './modules/user-detail/UserForm';
+import UserDetail from './modules/user-detail/components/UserForm';
 
 export function AppWithoutRouter() {
   return (
