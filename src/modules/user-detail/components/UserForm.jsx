@@ -1,12 +1,26 @@
 import React, { useState } from 'react';
 import { func } from 'prop-types';
+import Alert from '../../alerts/Alert';
 
 function UserDetail({ onSubmit }) {
+  const errorMessages = [];
   const [user, setUser] = useState({ firstName: '', lastName: '', isFamily: false });
 
   const handleInput = e => {
     const { name, value, checked, type } = e.target;
     setUser(state => ({ ...state, [name]: type === 'checkbox' ? checked : value }));
+  };
+
+  const validateUser = () => {
+    let isValid = true;
+    if (user.firstName.length > 30) {
+      isValid = false;
+      errorMessages.push('Firstname should have a maximum length of 30 characters');
+    }
+    return {
+      valid: isValid,
+      errors: errorMessages,
+    };
   };
 
   const handleSubmit = e => {
@@ -15,7 +29,7 @@ function UserDetail({ onSubmit }) {
   };
 
   return (
-    <form noValidate onSubmit={handleSubmit}>
+    <form noValidate onSubmit={e => (validateUser().valid ? handleSubmit(e) : null)}>
       <div className="form-group row">
         <label className="col-sm-2 col-form-label" htmlFor="firstName">
           First Name
@@ -25,11 +39,18 @@ function UserDetail({ onSubmit }) {
             className="form-control"
             id="firstName"
             name="firstName"
+            maxLength="30"
             placeholder="Enter First Name"
             type="text"
+            required
             value={user.firstName}
             onChange={handleInput}
           />
+          <div className="invalid-feedback" data-testid="validation-feedback-first-name">
+            {errorMessages.map(e => (
+              <Alert>{e}</Alert>
+            ))}
+          </div>
         </div>
       </div>
       <div className="form-group row">
