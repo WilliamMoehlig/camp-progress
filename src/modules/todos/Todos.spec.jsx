@@ -5,8 +5,8 @@ import Todos from './Todos';
 import renderWithRedux from '../../../test/renderWithRedux';
 
 describe('Todos component', () => {
-  function render() {
-    return renderWithRedux(<Todos />);
+  function render(initialState = {}) {
+    return renderWithRedux(<Todos />, { initialState });
   }
 
   test('it should have header', () => {
@@ -16,9 +16,16 @@ describe('Todos component', () => {
   });
 
   test('it should have items remaining footer', () => {
-    const { getByText } = render();
+    const initialState = {
+      todos: {
+        1: { id: 1, name: 'Buy bread', completed: false },
+        2: { id: 2, name: 'Take out the trash', completed: true },
+      },
+    };
 
-    expect(getByText(/items remaining/)).toHaveTextContent('0');
+    const { getByText } = render(initialState);
+
+    expect(getByText(/items remaining/)).toHaveTextContent('1');
   });
 
   test('it should add a new todo on enter in textbox', () => {
