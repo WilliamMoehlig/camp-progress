@@ -26,16 +26,24 @@ describe('test navbar component', () => {
     expect(getByRole('img')).toHaveAttribute('alt', 'Bootcamp Logo');
     expect(bootCamp).toHaveAttribute('href', '/');
   });
+
   test('renders log in when the user has not logged in', () => {
     const { queryByText } = render();
 
     expect(queryByText('Log In')).toBeInTheDocument();
     expect(queryByText('Log Out')).not.toBeInTheDocument();
   });
+
   test('renders log out when the user has logged in', () => {
     const { queryByText } = render('username');
 
     expect(queryByText('Log Out')).toBeInTheDocument();
     expect(queryByText('Log In')).not.toBeInTheDocument();
+  });
+
+  test('it should only show notification bar when logged in', () => {
+    const { queryByText } = render('username');
+    expect(queryByText('Log In')).not.toBeInTheDocument();
+    expect(queryByText(/([0-9])/)).toBeInTheDocument();
   });
 });
