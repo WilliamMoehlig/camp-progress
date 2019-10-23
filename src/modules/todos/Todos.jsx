@@ -4,18 +4,19 @@ import { func, array } from 'prop-types';
 
 import { createTodoCreator, completeTodoCreator } from '../../store/todoCreator';
 import todo from '../../store/todo';
+import '../../styles/todos.scss';
 
-function Todos({ todos, dispatch }) {
+function Todos({ todos, createTodo, completeTodo }) {
   const todoRef = useRef(null);
 
   const onEnter = e => {
     e.preventDefault();
-    dispatch(createTodoCreator(todo(todos.length + 1, todoRef.current.value, false)));
+    createTodo(todo(todos.length + 1, todoRef.current.value, false));
     todoRef.current.value = '';
   };
 
   const onClick = id => {
-    dispatch(completeTodoCreator(id));
+    completeTodo(id);
   };
 
   return (
@@ -40,7 +41,7 @@ function Todos({ todos, dispatch }) {
                         type="checkbox"
                         className="form-check-input"
                         value={elem.completed}
-                        onClick={() => onClick(elem.id)}
+                        onChange={() => onClick(elem.id)}
                       />
                       {elem.name}
                     </label>
@@ -64,13 +65,22 @@ function Todos({ todos, dispatch }) {
 
 Todos.propTypes = {
   todos: array,
-  dispatch: func.isRequired,
+  createTodo: func.isRequired,
+  completeTodo: func.isRequired,
 };
 
 Todos.defaultProps = {
   todos: [],
 };
 
+const mapDispatchToProps = dispatch => ({
+  createTodo: arg => dispatch(createTodoCreator(arg)),
+  completeTodo: arg => dispatch(completeTodoCreator(arg)),
+});
+
 const mapStateToProps = state => ({ todos: Object.values(state.todos) });
 
-export default connect(mapStateToProps)(Todos);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Todos);
