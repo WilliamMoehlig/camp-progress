@@ -1,12 +1,13 @@
 import React from 'react';
 import '@testing-library/jest-dom/extend-expect';
-import { render as renderRtl, within } from '@testing-library/react';
+import { within } from '@testing-library/react';
 
+import RenderWithRouter from '../../test/renderWithRouter';
 import identityContext from '../contexts/IdentityContext';
 import Navbar from './Navbar';
 
 function render(currentIdentity = undefined) {
-  const result = renderRtl(
+  const result = RenderWithRouter(
     <identityContext.Provider value={{ name: currentIdentity, setIdentity: () => {} }}>
       <Navbar />
     </identityContext.Provider>

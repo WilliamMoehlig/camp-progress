@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { NavLink } from 'react-router-dom';
 import identityContext from '../contexts/IdentityContext';
 import Button from './Button';
 import image from '../public/images/js-logo.png';
@@ -7,19 +8,25 @@ function Navbar() {
   const identity = useContext(identityContext);
   return (
     <nav className="navbar navbar-light bg-light">
-      <a className="navbar-brand" href="/">
+      <NavLink className="navbar-brand" to="/">
         <img src={image} width="30" height="30" className="d-inline-block align-top" alt="Bootcamp Logo" />
         Bootcamp
-      </a>
+      </NavLink>
       {identity.name ? (
         <>
-          <a href="/todo">Todos</a>
-          <a href="/logout">Log Out</a>
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <NavLink to="/todo">Todos</NavLink>
+            </li>
+          </ul>
+
+          <NavLink to="/logout">Log Out</NavLink>
         </>
       ) : (
-        <a href="/login">Log In</a>
+        <NavLink to="/login">Log In</NavLink>
       )}
       <Button
+        className="authenticateButton"
         event={() => {
           if (identity.name !== undefined && identity.name !== 'admin') {
             identity.setIdentity({ name: 'admin' });
