@@ -1,4 +1,4 @@
-import { createTodo, completeTodo } from './actionTypes';
+import { createTodo, completeTodo } from '../actionTypes';
 
 export const createTodoCreator = todo => {
   return {

@@ -1,4 +1,4 @@
-import { createTodo, completeTodo } from '../actionTypes';
+import { createTodo, completeTodo } from '../../actionTypes';
 
 const todoState = {};
 

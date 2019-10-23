@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { createTodoCreator, completeTodoCreator } from '../../store/todoCreator';
-import todo from '../../store/todo';
+import { createTodoCreator, completeTodoCreator } from '../../store/todo/todoCreator';
+import todo from '../../store/todo/todo';
 import '../../styles/todos.scss';
 
 function Todos() {

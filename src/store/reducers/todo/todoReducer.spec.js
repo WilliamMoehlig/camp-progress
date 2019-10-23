@@ -1,6 +1,6 @@
-import { createTodoCreator, completeTodoCreator } from '../todoCreator';
+import { createTodoCreator, completeTodoCreator } from '../../todo/todoCreator';
 import todoReducer from './todoReducer';
-import createToDo from '../todo';
+import createToDo from '../../todo/todo';
 
 describe('test todoReducer', () => {
   describe('add item', () => {
