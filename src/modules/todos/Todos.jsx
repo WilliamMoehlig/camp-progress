@@ -1,22 +1,25 @@
 import React, { useRef } from 'react';
-import { connect } from 'react-redux';
-import { func, array } from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { createTodoCreator, completeTodoCreator } from '../../store/todoCreator';
 import todo from '../../store/todo';
 import '../../styles/todos.scss';
 
-function Todos({ todos, createTodo, completeTodo }) {
+function Todos() {
   const todoRef = useRef(null);
+
+  const dispatch = useDispatch();
+  const todos = useSelector(state => Object.values(state.todos));
+  const remainingTodos = todos.filter(e => !e.completed);
 
   const onEnter = e => {
     e.preventDefault();
-    createTodo(todo(todos.length + 1, todoRef.current.value, false));
+    dispatch(createTodoCreator(todo(todos.length + 1, todoRef.current.value, false)));
     todoRef.current.value = '';
   };
 
   const onClick = id => {
-    completeTodo(id);
+    dispatch(completeTodoCreator(id));
   };
 
   return (
@@ -29,7 +32,7 @@ function Todos({ todos, createTodo, completeTodo }) {
           </form>
           <hr />
           <ul className="list-unstyled todos__list">
-            {todos.map(elem => {
+            {remainingTodos.map(elem => {
               if (elem.completed) {
                 return null;
               }
@@ -53,8 +56,8 @@ function Todos({ todos, createTodo, completeTodo }) {
           <hr />
           <div className="todos__footer">
             <strong>
-              <span>{todos.filter(e => e.completed !== true).length}</span>
-            </strong>{' '}
+              <span>{remainingTodos.length}</span>
+            </strong>
             items remaining
           </div>
         </div>
@@ -63,24 +66,4 @@ function Todos({ todos, createTodo, completeTodo }) {
   );
 }
 
-Todos.propTypes = {
-  todos: array,
-  createTodo: func.isRequired,
-  completeTodo: func.isRequired,
-};
-
-Todos.defaultProps = {
-  todos: [],
-};
-
-const mapDispatchToProps = dispatch => ({
-  createTodo: arg => dispatch(createTodoCreator(arg)),
-  completeTodo: arg => dispatch(completeTodoCreator(arg)),
-});
-
-const mapStateToProps = state => ({ todos: Object.values(state.todos) });
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Todos);
+export default Todos;
