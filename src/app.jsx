@@ -11,9 +11,10 @@ import Navbar from './components/Navbar';
 import IdentityContext from './contexts/IdentityContext';
 import Todos from './modules/todos/Todos';
 import store from './store/store';
+import Logout from './modules/logout/Logout';
 
 export function AppWithoutRouter() {
-  const [identity, setIdentity] = useState({});
+  const [identity, setIdentity] = useState();
 
   const identityContextValue = useMemo(
     () => ({
@@ -31,6 +32,7 @@ export function AppWithoutRouter() {
           <Route component={Login} path="/login" />
           <Route component={UserDetail} path="/users/new" />
           <Route component={Todos} path="/todo" />
+          <Route component={Logout} path="/logout" />
           <Route component={Home} exact path="/" />
           <Route component={NotFound} path="*" />
         </Switch>

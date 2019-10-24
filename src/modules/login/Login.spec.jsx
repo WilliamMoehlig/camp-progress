@@ -12,10 +12,10 @@ jest.mock('./services/authService');
 describe('Login Module', () => {
   function renderComponent(initialUser) {
     const identityProviderValue = {
-      current: initialUser,
+      name: initialUser,
     };
 
-    identityProviderValue.setCurrent = user => {
+    identityProviderValue.setIdentity = user => {
       identityProviderValue.current = user;
     };
 
@@ -123,7 +123,7 @@ describe('Login Module', () => {
 
       expect(identityProviderValue).toHaveProperty('current', givenUsername);
 
-      expect(history).toHaveProperty('location', toBeALocation());
+      expect(history).toHaveProperty('location', toBeALocation({ pathname: 'not-home' }));
     });
   });
 });

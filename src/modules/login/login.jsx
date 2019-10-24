@@ -4,7 +4,7 @@ import LoginForm from './components/LoginForm';
 import IdentityContext from '../../contexts/IdentityContext';
 
 function Login() {
-  const { current: currentIdentity, setCurrent: setCurrentIdentity } = useContext(IdentityContext);
+  const { name: currentIdentity, setIdentity: setCurrentIdentity } = useContext(IdentityContext);
   const [submitted, setSubmitted] = useState(false);
 
   const handleLogin = username => {

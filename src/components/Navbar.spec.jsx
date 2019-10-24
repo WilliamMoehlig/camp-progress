@@ -6,6 +6,17 @@ import RenderWithRouter from '../../test/renderWithRouter';
 import identityContext from '../contexts/IdentityContext';
 import Navbar from './Navbar';
 
+jest.mock('../components/NotificationCount', () => () => {
+  return (
+    <div className="notificationCount">
+      <span>
+        <img src="" className="notificationImage" alt="notifications" />
+      </span>
+      <span>(0)</span>
+    </div>
+  );
+});
+
 function render(currentIdentity = undefined) {
   const result = RenderWithRouter(
     <identityContext.Provider value={{ name: currentIdentity, setIdentity: () => {} }}>
@@ -41,9 +52,13 @@ describe('test navbar component', () => {
     expect(queryByText('Log In')).not.toBeInTheDocument();
   });
 
-  test('it should only show notification bar when logged in', () => {
+  test('it should show notification when logged in', () => {
     const { queryByText } = render('username');
-    expect(queryByText('Log In')).not.toBeInTheDocument();
     expect(queryByText(/([0-9])/)).toBeInTheDocument();
+  });
+
+  test('it should not show notification when not logged in', () => {
+    const { queryByText } = render();
+    expect(queryByText(/([0-9])/)).not.toBeInTheDocument();
   });
 });

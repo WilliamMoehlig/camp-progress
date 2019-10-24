@@ -23,6 +23,7 @@ function LoginForm({ onLogin }) {
     onLogin(isValid ? username : undefined);
 
     e.target.reset();
+
     setSubmitCount(i => i + 1);
   };
 
