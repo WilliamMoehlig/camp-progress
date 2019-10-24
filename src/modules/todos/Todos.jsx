@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { createSelector } from 'reselect';
 
 import { createTodoCreator, completeTodoCreator } from '../../store/todo/todoCreator';
 import todo from '../../store/todo/todo';
@@ -9,8 +10,13 @@ function Todos() {
   const todoRef = useRef(null);
 
   const dispatch = useDispatch();
-  const todos = useSelector(state => Object.values(state.todos));
-  const remainingTodos = todos.filter(e => !e.completed);
+
+  const todos = createSelector(
+    state => state.todos,
+    todoState => Object.values(todoState)
+  );
+
+  const remainingTodos = useSelector(todos).filter(e => !e.completed);
 
   const onEnter = e => {
     e.preventDefault();
