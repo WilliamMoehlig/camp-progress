@@ -1,15 +1,19 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { createTodoCreator, completeTodoCreator } from '../../store/todo/todoCreator';
+import { createTodoCreator, completeTodoCreator, getCompletedTodoCreator } from '../../store/todo/todoCreator';
 import todo from '../../store/todo/todo';
 import '../../styles/todos.scss';
 
 function Todos() {
-  const todoRef = useRef(null);
-
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCompletedTodoCreator());
+  }, [dispatch]);
+
+  const todoRef = useRef(null);
 
   const todos = createSelector(
     state => state.todos,

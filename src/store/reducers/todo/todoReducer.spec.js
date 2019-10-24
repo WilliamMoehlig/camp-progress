@@ -1,5 +1,6 @@
 import { createTodoCreator, completeTodoCreator } from '../../todo/todoCreator';
 import todoReducer from './todoReducer';
+import { getTodos } from '../../actionTypes';
 import createToDo from '../../todo/todo';
 
 describe('test todoReducer', () => {
@@ -44,6 +45,33 @@ describe('test todoReducer', () => {
       todoReducer(initialState, completeTodoCreator(1));
 
       expect(initialState).not.toHaveProperty('completed', true);
+    });
+  });
+
+  describe('handle multiple todos', () => {
+    test('map todos array to object', async () => {
+      const todo1 = {
+        id: 1,
+        name: 'Wash dishes',
+      };
+
+      const todo2 = {
+        id: 2,
+        name: 'Take out the trash',
+      };
+
+      const todo3 = {
+        id: 3,
+        name: 'Walk the dog',
+        completed: true,
+      };
+
+      const todos = [todo1, todo2, todo3];
+      const mappedTodos = { [todo1.id]: todo1, [todo2.id]: todo2, [todo3.id]: todo3, called: true };
+
+      const result = todoReducer({}, { type: getTodos, payload: todos });
+
+      expect(result).toStrictEqual(mappedTodos);
     });
   });
 });
